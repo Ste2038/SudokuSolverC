@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 
-int** importData(char* filename, int* nLato);
+int** importData(char* filename, int* nLato, int* nSeg);
 int** cloneMatrice(int** matr, int nLato);
 int pre_solver_metodo1(int** matrice, int nLato, int nSeg);
 int pre_solver_metodo2(int** matrice, int nLato, int nSeg);
@@ -12,21 +12,21 @@ int solver_metodo2(int** matrice, int nLato, int nSeg, int index_pos, int* pos, 
 int validate_metod1(int **matrice, int nLato, int nSeg, int pos);
 
 int main(void) {
-    int nLato;
+    int nLato, nSeg;
     double diff;
     time_t pre_time;
     time_t post_time;
-    int** matrice = importData("../import_9.txt", &nLato);
+    int** matrice = importData("../import_9.txt", &nLato, &nSeg);
 
 
     /*pre_time = time(NULL);
-    solver_metodo1(cloneMatrice(matrice, nLato), nLato, 3, 0);
+    solver_metodo1(cloneMatrice(matrice, nLato), nLato, nSeg, 0);
     post_time = time(NULL);
     diff = difftime(post_time, pre_time);
     printf("%f s impiegati\n", diff);*/
 
     pre_time = time(NULL);
-    pre_solver_metodo2(cloneMatrice(matrice, nLato), nLato, 3);
+    pre_solver_metodo2(cloneMatrice(matrice, nLato), nLato, nSeg);
     post_time = time(NULL);
     diff = difftime(post_time, pre_time);
     printf("%f s impiegati\n", diff);
@@ -34,12 +34,13 @@ int main(void) {
     return 0;
 }
 
-int** importData(char* filename, int *nLato){
+int** importData(char* filename, int *nLato, int *nSeg){
     FILE *fp = fopen(filename, "r");
     if(fp == NULL) return NULL;
-    int tmp;
-    fscanf(fp, "%d", &tmp);
+    int tmp, tmp2;
+    fscanf(fp, "%d %d", &tmp, &tmp2);
     *nLato = tmp;
+    *nSeg = tmp2;
 
     int** matrice = (int**) malloc(*nLato * sizeof(int*));
 
